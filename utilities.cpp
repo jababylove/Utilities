@@ -13,6 +13,8 @@
  #include <thread>
  #include <cmath>
  #include <numeric>
+ #include <map>
+ #include <functional>
 
  void updateStatusBar(int percentage) {
     if(percentage < 0 || percentage > 100) {
@@ -43,6 +45,9 @@
      * arguments and returns a boolean. Functions either return true or false 
      * are called predicates.
      */
+
+
+    std::cout << "\033[?25l";   // Hide cursor
 
     std::cout << "The functions std::min and std::minmax." \
               << std::endl;
@@ -92,6 +97,10 @@
 
     std::cout << "\n----------- Pausing for a short moment -----------" \
               << std::endl;
+    std::cout << '\n' << "--------------------------------------------------"
+              << '\n'
+              << "\033[2A";   // Move cursor up two lines
+    std::cout << "\033[?25l";   // Hide cursor
     for (int i : std::views::iota(1, 101)) {
         updateStatusBar(i);
         std::this_thread::sleep_for(std::chrono::milliseconds(34));
@@ -124,23 +133,90 @@
     std::cout << "-----------------------------------------------------------" \
                  "--------------------\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    std::cout << " Vector: {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, " \
-                 "0.9, 1.0}" << std::endl;
+    std::cout << " --- Vector: {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, " \
+                 "0.9, 1.0} ---" << std::endl;
     for (auto v: {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}) {
         std::cout << "std::lerp(10, 20, " << v << "): " << std::lerp(10,20, v) \
                   << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(350));
     }
     std::cout << "-----------------------------------------------------------" \
                  "--------------------\n";
     
     std::cout << "\n----------- Pausing for a short moment -----------" \
               << std::endl;
+    std::cout << '\n' << "--------------------------------------------------"
+              << '\n'
+              << "\033[2A";   // Move cursor up two lines
     for (int i : std::views::iota(1, 101)) {
         updateStatusBar(i);
         std::this_thread::sleep_for(std::chrono::milliseconds(34));
     }
     std::cout << "\n\n" << std::endl;
+
+    /**
+     * @brief std::function¹¹ can store arbitrary callables in variables. It’s 
+     * a kind of polymorphic function wrapper. A callable may be a lambda 
+     * function, a function object, or a function. std::function is always 
+     * necessary and can’t be replaced by auto, if you have to specify the type 
+     * of the callable explicitly.
+     */
+
+    std::cout << "The function std::function" << std::endl;
+    std::cout << "--------------------------\n\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+
+    std::cout << "Creating a table of arithmetic operations using std::function"
+              << std::endl;
+    std::cout << "-----------------------------------------------------------" \
+                 "--------------------\n";
+    std::map<const char, std::function<double(double, double)>> tab;
+    tab.insert(std::make_pair('+', [](double a, double b) { return a + b; }));
+    tab.insert(std::make_pair('-', [](double a, double b) { return a - b; }));
+    tab.insert(std::make_pair('*', [](double a, double b) { return a * b; }));
+    tab.insert(std::make_pair('/', [](double a, double b) { return a / b; }));
+
+    std::cout << "tab.insert(std::make_pair('+', [](double a, double b) { " \
+              << "return a + b; }))" << std::endl;
+    std::cout << "tab.insert(std::make_pair('-', [](double a, double b) { " \
+                 "return a - b; }))" << std::endl;
+    std::cout << "tab.insert(std::make_pair('*', [](double a, double b) { " \
+              << "return a * b; }))" << std::endl;
+    std::cout << "tab.insert(std::make_pair('/', [](double a, double b) { " \
+              << "return a / b; }))" << std::endl;
+     
+    std::cout << "\n....\n" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    // Output: 8
+    std::cout << "tab['+'](3.5, 4.5) = " << tab['+'](3.5, 4.5) << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    // Output: -1
+    std::cout << "tab['-'](3.5, 4.5) = " << tab['-'](3.5, 4.5) << std::endl; 
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    // Output: 15.75
+    std::cout << "tab['*'](3.5, 4.5) = " << tab['*'](3.5, 4.5) << std::endl; 
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    // Output: 0.777778
+    std::cout << "tab['/'](3.5, 4.5) = " << tab['/'](3.5, 4.5) << std::endl; 
+
+    std::cout << "-----------------------------------------------------------" \
+                 "--------------------\n";
+    
+    std::cout << "\n----------- Pausing for a short moment -----------" \
+              << std::endl;
+    std::cout << '\n' << "--------------------------------------------------"
+              << '\n'
+              << "\033[2A";   // Move cursor up two lines
+    for (int i : std::views::iota(1, 101)) {
+        updateStatusBar(i);
+        std::this_thread::sleep_for(std::chrono::milliseconds(34));
+    }
+
+    std::cout << "\n\n" << std::endl;
+    std::cout << "\033[?25h";   // Show cursor
+    std::cout << "[Exiting Application]" << std::endl;
 
     return 0;
 }
