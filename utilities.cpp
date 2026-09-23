@@ -15,6 +15,7 @@
  #include <numeric>
  #include <map>
  #include <functional>
+ #include <tuple>
 
  void updateStatusBar(int percentage) {
     if(percentage < 0 || percentage > 100) {
@@ -213,6 +214,138 @@
         updateStatusBar(i);
         std::this_thread::sleep_for(std::chrono::milliseconds(34));
     }
+    std::cout << "\n\n" << std::endl;
+
+    /**
+     * @brief Tuples
+     * 
+     * You can create tuples of arbitrary length and types with std::tuple¹⁴. 
+     * The class template needs the header <tuple>. std::tuple is a 
+     * generalization of std::pair. You can convert between tuples with two 
+     * elements and pairs. Like his small brother std::pair, the tuple has a 
+     * default, a copy, and a move constructor. You can swap tuples with the 
+     * function std::swap.
+     * 
+     * The i-th element of a tuple t can be referenced by the function template
+     * std::get: std::get<i-1>(t). By std::get<type>(t) you can directly refer 
+     * to the element of the type type.
+     * 
+     * Tuples support the comparison operators ==, !=, <, >, <= and >=. If you 
+     * compare two tuples, the elements of the tuples are compared 
+     * lexicographically. The comparison starts at the index 0.
+     */
+
+
+    std::cout << "The functions std::tuple and std::make_tuple" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(750));
+    std::cout << "-----------------------------------------------------------" \
+                 "--------------------\n";
+    std::tuple<std::string, int, float> tup1("first", 3, 4.17f);
+
+    // The helper function std::make_tuple¹⁵ is quite convenient for the 
+    // creation of tuples.
+    auto tup2 = std::make_tuple("second", 4, 1.1f);
+
+    // first, 3, 4.17
+    std::this_thread::sleep_for(std::chrono::milliseconds(750));
+    std::cout << "Creating a tuple: std::tuple<std::string, int, float> " \
+                 "tup1(\"first\", 3, 4.17f): ";
+    std::cout << "\t" <<get<0>(tup1) << ", " << get<1>(tup1) << ", " 
+              << get<2>(tup1) << std::endl;
+    
+    // second, 4, 1.1
+    std::this_thread::sleep_for(std::chrono::milliseconds(750));
+    std::cout << "Creating a tuple: auto tup2 = " \
+                 "std::make_tuple(\"second\", 4, 1.1): ";
+    std::cout << "\t" << get<0>(tup2) << ", " << get<1>(tup2) << ", " << get<2>(tup2)
+              << std::endl;
+    
+    // true
+    std::this_thread::sleep_for(std::chrono::milliseconds(750));
+    std::cout << "tup1 < tup2: ";
+    std::cout << "\t" << (tup1 < tup2) << std::endl;              
+
+    auto pair = std::make_pair(1, true);
+    std::tuple<int, bool> tup = pair; // conversion from pair to tuple
+    
+    std::cout << "\n....\n" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+
+    std::cout << "Setting tup2 for second to Second 'get<0>(tup2) = Second";
+    get<0>(tup2)= "Second";
+    std::this_thread::sleep_for(std::chrono::milliseconds(750));
+
+    std::cout << "\nTuple tup2: ";
+    std::cout << get<0>(tup2) << "," << get<1>(tup2) << ","
+              << get<2>(tup2) << std::endl; // Second, 4, 1.1
+    std::this_thread::sleep_for(std::chrono::milliseconds(750));
+
+    std::cout << "tup1 < tup2: ";
+    std::cout << (tup1 < tup2) << std::endl; // false
+    std::this_thread::sleep_for(std::chrono::milliseconds(750));
+
+    std::cout << "-----------------------------------------------------------" \
+                 "--------------------\n";
+
+    int first = 1;
+    int second = 2;
+    int third = 3;
+    int fourth = 4;
+    std::cout << first << " " << second << " "
+              << third << " " << fourth << std::endl; // 1 2 3 4
+
+    std::cout << "Binding a tuple to the variables first, second, third and " \
+              << "fourth" << std::endl;
+    auto tup0 = std::tie(first, second, third, fourth) // bind the tuple
+                    = std::make_tuple(101, 102, 103, 104); // create the tuple
+
+    // and assign it
+    std::cout << get<0>(tup0) << " " << get<1>(tup0) << " " << get<2>(tup0)
+              << " " << get<3>(tup) << std::endl; // 101 102 103 104
+    std::cout << first << " " << second << " " << third << " "
+              << fourth << std::endl; // 101 102 103 104
+    
+    first = 201;
+    get<1>(tup0) = 202;
+    std::cout << get<0>(tup0) << " " << get<1>(tup) << " " << get<2>(tup)
+              << " " << get<3>(tup0) << std::endl; // 201 202 103 104
+    std::cout << first << " " << second << " " << third << " "
+              << fourth << std::endl; // 201 202 103 104
+    int a, b;
+    std::tie(std::ignore, a, std::ignore, b) = tup0;
+    std::cout << a << " " << b << std::endl; // 202 104            
+    
+
+    std::cout << "-----------------------------------------------------------" \
+                 "--------------------\n";
+    
+    std::cout << "\n----------- Pausing for a short moment -----------" \
+              << std::endl;
+    std::cout << '\n' << "--------------------------------------------------"
+              << '\n'
+              << "\033[2A";   // Move cursor up two lines
+    for (int i : std::views::iota(1, 101)) {
+        updateStatusBar(i);
+        std::this_thread::sleep_for(std::chrono::milliseconds(34));
+    }
+    std::cout << "\n\n" << std::endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     std::cout << "\n\n" << std::endl;
     std::cout << "\033[?25h";   // Show cursor
